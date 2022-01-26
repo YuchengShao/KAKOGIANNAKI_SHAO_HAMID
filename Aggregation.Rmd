@@ -1,0 +1,58 @@
+---
+title: "Aggregation"
+author: "Maria Kakogiannaki"
+date: "1/25/2022"
+output: html_document
+css: style.css
+---
+
+# Arbre de Décision
+
+Nous estimons un arbre de décision  sur l'échantillon d'apprentisage. Afin de déterminer le choix du paramètre de compléxité, nous utilisons la méthode de validation Croisée par k-fold de type 5x2, via la méthode de coût de compléxité minimale.
+
+
+# Random Forest  
+
+On estime une forêt aléatoire en se focalisant sur la détermination du nombre optimal de prédicteurs à chaque division en fixant le nombre d'arbres (ntree) à 500.  On fait varier le nombre de prédicteurs (mtry) de 1 à 12 par pas unitaire, où 12 représente le cas du bagging.
+
+```{r eval=FALSE}  
+
+# Ajustement du nombre de prédicteurs à considérer pour chaque division
+
+library(randomForest)
+set.seed(7)
+rf_model=train(cible~.,data=train,method="rf",tuneGrid=expand.grid(mtry=seq(1,12,1)),
+               trControl=train.control,ntree=500,metric="ROC")
+
+max(rf_model$results[,"ROC"])
+rf_model$bestTune 
+
+# Pour ntree=500, c'est mtry=2 qui maximise l'AUC (=0.95) de la procédure de validation croisée 5 x 2 
+
+```
+
+Cette valeur optimale de 2 prédicteurs est proche de la valeur conseillée égale à la racine carrée du nombre de prédicteurs dans un problème de classification.  
+Avant de présenter les performances du modèle sur l'échantillon de test, on peut déjà apprécier, le taux d'erreur out-of-bag et sa variation en fonction du nombre d'arbres utilisés.
+
+```{r eval=FALSE}
+
+# Estimation d'une forêt aléatoire sur tout l'échantillon d'apprentissage avec 500 arbres et 3 prédicteurs
+
+set.seed(7)
+rf_fit=randomForest(cible~.,data=train,ntree=500,mtry=2)
+plot(rf_fit$err.rate[, 1], type = "l", 
+     xlab = "nombre d'arbres", ylab = "erreur OOB",main="Évolution du taux d'erreur OOB avec le nombre d'arbres")
+
+``` 
+![OBB Erreur-Nombre des Arbres](D:/projet big data/4.png){width=50%}
+
+Le taux d'erreur OOB diminue continuellement jusqu'à 125 arbres environ. À partir de là, il fluctue globalement autour de 0.09 malgré l'acccroissement du nombre d'arbres.
+
+# Gradient Boosting  
+
+On met en oeuvre le gradient boosting, en contrôlant plusieurs paramètres à savoir le nombre d'abres (n.trees), la profondeur maximale de chaque arbre (interaction.depth), le taux d'apprentissage (shrinkage)=0.1 et le nombre minimal d'observations dans chaque noeud terminal (n.minobsinnode).  
+Ce choix de contrôler plus de paramètres qu'avec la random forest est dû au fait que le boosting est plus sujet au sur-apprentissage. En effet, la random Forest vise principalement à réduire la variance par l'aggrégation, tandis que la gradient boosting, en plus de réduire la variance, facilite par construction une réduction du biais. Sans contrôle approprié des hyperparamètres, cette réduction du biais peut se payer au prix d'une variance plus élevée que dans la random Forest.  
+
+  
+
+

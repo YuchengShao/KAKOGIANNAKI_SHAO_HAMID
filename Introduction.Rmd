@@ -1,0 +1,50 @@
+---
+title: "Méthodologie"
+author: "Maria Kakogiannaki"
+date: "1/25/2022"
+output: html_document
+css: style.css
+---
+
+# Contexte 
+
+L'objectif de cette application est de résoudre un problème de classification binaire en utilisant 
+plusieurs modèles. Dans notre projet, nous allons prévoir la probabilité de dépasser 90 jours de son
+paiment ou pire. Pour y réussir, nous utilisons un certain nombre de prédicteurs en s'appuyant sur des modèles économétrics et des méthodes de Machine Learning.
+
+La base de données disponible, dénomée "Kaggle-Give me some crédit", compte 150000 prêts dont 10026 qui ont depassé 90 jours. Elle contient 12 variables prédictives et l'indicatrice de défaut dénomée cible.
+
+![Distribution de la variable cible](D:/projet big data/1.png)
+
+Au secteur bancaire, le modèle économétrique standard est la régression logistique, particulièrement prisée pour son interprétabilité. Néanmoins, concernant les performances prédictives, les méthodes ensemblistes tels que les forêts aléatoires fournissent de meilleurs résultats. L'incovéniant de ces modèles est que ils ne sont pas facilement interprétables donc ils ne sont pas en accordance aux exigences règlementaires bancaires.
+
+# Méthodologie  
+
+Dans notre base des données, nous rémarquons l'existance des **valeurs manquantes** pour les variables Monthly_income et Number_of_Dependents. Nous avons décider de les remplacer par la médiane, qui n'est pas sensible aux valeurs extrêmes. 
+
+![Missing Values in the dataset](D:/projet big data/3.png){width=50%}
+
+En plus, nous avons remarquer la présence des valeurs aberantes dans plusieurs variables. Pour cette raison, nous avons décider de les 
+remplacer par la mediane de chaque variable.
+
+Concernant le **partitionnement des données**, deux échantillons ont été crées, un échantillon d'apprentissage contenant 75% des observations, et un échantillon de test contenant 25% des observations. **Ce partitionnement a été stratifié** par rapport à la variable cible de telle sorte à préserver le même taux de dépassage dans les deux échantillons.  
+
+- **L'échantillon d'apprentissage a été utilisé à la fois pour l'estimation des modèles et le choix des hyperparamètres à travers une procédure connue sous le nom de repeated k-fold cross validation**. Celle-ci consiste à répéter N fois un partitionnement en k blocs de l'échantillon d'apprentissage. Pour contrôler le temps de calcul, nous avons opté pour un 5 x 2-fold cross validation, c'est-à-dire que l'échantillon d'apprentissage a été partitionné en deux ensembles de taille identique et que cette division a été répétée 5 fois.   
+
+On fixe un seed pour assurer la reproductibilité des résulats, et on rajoute des options pour permettre le choix des hyperparamètres à l'aide de métriques propres à la classification binaire.  
+
+```{r eval=FALSE}    
+# Contrôle de l'apprentissage des modèles avec une méthode 5 X 2-fold cross-validation 
+
+library(caret)
+set.seed(7)  
+train.control=trainControl(method="repeatedcv",number=2,repeats=5,classProbs=TRUE,summaryFunction=twoClassSummary)  
+``` 
+
+# Contenu de l'application  
+
+- D'abord, dans la section **Estimation des modèles**, on présente les différents modèles estimés, en résumant la démarche adoptée pour leur implémentation.  
+
+- Ensuite, dans la section **Performance des modèles**, on répond à l'objectif de l'application à savoir comparer les résultats des différents modèles avec différentes métriques.  
+
+- Enfin, dans la section **Simulations**, on introduit une interface interactive afin de permettre à l'utilisateur de modifier certains paramètres clés des différents modèles et en apprécier l'influence sur certains résultats d'estimation et sur les performances obtenues sur l'ensemble de test. 

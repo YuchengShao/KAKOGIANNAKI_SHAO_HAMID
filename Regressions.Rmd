@@ -1,0 +1,27 @@
+---
+title: "Regressions"
+author: "Maria Kakogiannaki"
+date: "1/25/2022"
+output: html_document
+css: style.css
+---
+
+# La régression logistique avec différentes variantes
+
+On met en place trois modèles de régression logistique:   
+
+1. **Une régression logistique linéaire** : Il s'agit de la version de base de la régression logistique dans laquelle le logit dépend linéairement de toutes les variables explicatives.  
+
+2. **Une régression logistique de type ridge** : Il s'agit d'un type de régression qui pénalise plus les variables qui ne sont pas significatives pour notre modèle, en diminuant leur contribution au modèle. Cette méthode nous aide d'augmenter la stabilité de la régression. La méthode de Ridge peut être adaptée à la régression avec des prédicteurs **corrélés**. Nous choisissons le paramètre de régularisation, lambda, qui minimise l'erreur de classification. Pour éviter le risque de sur-ajustement, nous allons utiliser la K-fold validation croisée de type 5x2, afin de trouver le lambda optimale.  
+
+3. **Une régression logistique  avec Lasso adaptatif** : L'estimateur de Lasso est convergent en sélection sous la condition d'irréprésentabilité. En cas de violation de cette condition, le risque de sélection de variables non pertinentes est significatif.
+La régression de Lasso adaptive procède à une modification de la fonction de pénalisation de type Lasso.
+
+4. **Une régression logistique de type Elastic Net** : Elle combine à la fois les pénalisations de Ridge et Lasso. La régression d'Elastic Net permet de pallier à deux défauts de la régression Lasso:
+A) Elle ellimine la probabilité d'exclusion de variables pertinantes, mais fortement corrélées.
+B) Le nombre des variables sélectionnées admet une borne supérieure égale à n. 
+Elastic net nous permet de sélectionner plus de n variables qui peuvent être corrélées entre eux. Afin de déterminer ses hyperparamètres, nous utilisons la validation croisée K-fold de type
+5x2.
+
+**Remarque** : Dans le cas de régression logistique, la sélection de variables a été faite en utilisant la régression de type stepwise.
+
