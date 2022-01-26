@@ -44,7 +44,7 @@ plot(rf_fit$err.rate[, 1], type = "l",
      xlab = "nombre d'arbres", ylab = "erreur OOB",main="Évolution du taux d'erreur OOB avec le nombre d'arbres")
 
 ``` 
-![OBB Erreur-Nombre des Arbres](D:/projet big data/4.png){width=50%}
+
 
 Le taux d'erreur OOB diminue continuellement jusqu'à 125 arbres environ. À partir de là, il fluctue globalement autour de 0.09 malgré l'acccroissement du nombre d'arbres.
 

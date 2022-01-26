@@ -14,7 +14,6 @@ paiment ou pire. Pour y réussir, nous utilisons un certain nombre de prédicteu
 
 La base de données disponible, dénomée "Kaggle-Give me some crédit", compte 150000 prêts dont 10026 qui ont depassé 90 jours. Elle contient 12 variables prédictives et l'indicatrice de défaut dénomée cible.
 
-![Distribution de la variable cible](D:/projet big data/1.png)
 
 Au secteur bancaire, le modèle économétrique standard est la régression logistique, particulièrement prisée pour son interprétabilité. Néanmoins, concernant les performances prédictives, les méthodes ensemblistes tels que les forêts aléatoires fournissent de meilleurs résultats. L'incovéniant de ces modèles est que ils ne sont pas facilement interprétables donc ils ne sont pas en accordance aux exigences règlementaires bancaires.
 
@@ -22,7 +21,7 @@ Au secteur bancaire, le modèle économétrique standard est la régression logi
 
 Dans notre base des données, nous rémarquons l'existance des **valeurs manquantes** pour les variables Monthly_income et Number_of_Dependents. Nous avons décider de les remplacer par la médiane, qui n'est pas sensible aux valeurs extrêmes. 
 
-![Missing Values in the dataset](D:/projet big data/3.png){width=50%}
+
 
 En plus, nous avons remarquer la présence des valeurs aberantes dans plusieurs variables. Pour cette raison, nous avons décider de les 
 remplacer par la mediane de chaque variable.
